@@ -137,7 +137,6 @@ async function upload_thumb(filePath, dest) {
 
     // Uploads a local file to the bucket
     await gcsBucket.upload(filePath, {
-        gzip: true,
         destination: dest,
         metadata: {
             cacheControl: 'public, max-age=31536000',

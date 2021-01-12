@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const http = require('http')
+const http = require('http') 
 const url = require('url')
 const { v4: uuidv4 } = require('uuid');
 const sharp = require("sharp");
