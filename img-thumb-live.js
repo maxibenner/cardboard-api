@@ -103,7 +103,7 @@ async function create_upload_thumbnail(storage_key) {
 
     // 2. Resize
     const pipeline = sharp()
-    pipeline.resize(450, 450).jpeg({
+    pipeline.resize(450).jpeg({
         quality: 50
     }).pipe(file);
 
