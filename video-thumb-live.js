@@ -124,12 +124,12 @@ async function get_thumbnail(dlUrl, docId, dur) {
     // Make sure file doesn't already exist
     try {
         // Extract and save
-        execSync(`ffmpeg -i "${dlUrl}" -ss ${at} -vframes 1 -filter:v scale=450:-1 -qscale:v 7 ./tmp/thumbs/${docId}.jpeg`)
+        execSync(`ffmpeg -i "${dlUrl}" -ss ${at} -vframes 1 -filter:v scale=450:-1 -qscale:v 7 ./tmp/${docId}.jpeg`)
     } catch {
         console.log('This file already exists. Skipping download')
     }
 
-    return `./tmp/thumbs/${docId}.jpeg`
+    return `./tmp/${docId}.jpeg`
 }
 
 // Uplaod thumb
