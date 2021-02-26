@@ -132,7 +132,7 @@ async function get_thumbnail(dlUrl, docId, dur) {
     return `./tmp/${docId}.jpeg`
 }
 
-// Uplaod thumb
+// Upload thumb
 async function upload_thumb(filePath, dest) {
 
     // Uploads a local file to the bucket
