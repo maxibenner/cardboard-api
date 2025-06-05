@@ -24,8 +24,8 @@ COPY sample.env sample.env
 # Create tmp directory for video thumbnails
 RUN mkdir -p /usr/src/app/tmp
 
-# Expose ports for all services (img/video, dev/live)
-EXPOSE 8081 8091
+# Expose only the router port
+EXPOSE 8080
 
-# Start both servers (img-thumb and video-thumb) in the background
-CMD ["sh", "-c", "node -r dotenv/config img-thumb.js & node -r dotenv/config video-thumb.js && wait"]
+# Start the router server
+CMD ["node", "-r", "dotenv/config", "router.js"]

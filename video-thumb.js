@@ -33,57 +33,53 @@ const gcs = new Storage({
 });
 const gcsBucket = gcs.bucket(`${project_id}.appspot.com`);
 
-// Create server
-http
-  .createServer(async function (req, res) {
-    // Parse query parameter
-    const queryObject = url.parse(req.url, true).query;
+// Export handler for router
+module.exports.handleRequest = async function (req, res) {
+  // Parse query parameter
+  const queryObject = url.parse(req.url, true).query;
 
-    const headers = {
-      "Access-Control-Allow-Origin": "*",
-      "Content-Type": "text/html",
-    };
-    res.writeHead(200, headers);
+  const headers = {
+    "Access-Control-Allow-Origin": "*",
+    "Content-Type": "text/html",
+  };
+  res.writeHead(200, headers);
 
-    // Create variables
-    let key = null;
+  // Create variables
+  let key = null;
 
-    // Throw error if storage_key is missing
-    if (!queryObject.key) {
-      res.end('missing argument "key"');
-      return;
-    } else key = queryObject.key; //storage key
+  // Throw error if storage_key is missing
+  if (!queryObject.key) {
+    res.end('missing argument "key"');
+    return;
+  } else key = queryObject.key; //storage key
 
-    // Extrapolate variables from key
-    let userId = key.split("/")[1];
-    let docId = key.split("/")[2].split(".")[0];
+  // Extrapolate variables from key
+  let userId = key.split("/")[1];
+  let docId = key.split("/")[2].split(".")[0];
 
-    // Get download url
-    const dlUrl = await sign_wasabi_download_url(key);
+  // Get download url
+  const dlUrl = await sign_wasabi_download_url(key);
 
-    // Codec
-    const codec = await get_codec(dlUrl);
+  // Codec
+  const codec = await get_codec(dlUrl);
 
-    // Duration in seconds
-    const dur = await get_duration(dlUrl);
+  // Duration in seconds
+  const dur = await get_duration(dlUrl);
 
-    // Extract thumbnail
-    const filePath = await get_thumbnail(dlUrl, docId, dur);
+  // Extract thumbnail
+  const filePath = await get_thumbnail(dlUrl, docId, dur);
 
-    // Upload thumbnail
-    const gcsDest = `users/${userId}/thumbnails/${docId}.jpeg`;
-    await upload_thumb(filePath, gcsDest);
+  // Upload thumbnail
+  const gcsDest = `users/${userId}/thumbnails/${docId}.jpeg`;
+  await upload_thumb(filePath, gcsDest);
 
-    // Update Firestore
-    update_firestore(userId, docId, codec);
+  // Update Firestore
+  update_firestore(userId, docId, codec);
 
-    // Send response
-    res.end("Success");
-    //res.end(err)
-  })
-  .listen(8091, "localhost");
-
-console.log("video-thumb live server running on port 8091");
+  // Send response
+  res.end("Success");
+  //res.end(err)
+};
 
 // Get signed download url
 async function sign_wasabi_download_url(key) {

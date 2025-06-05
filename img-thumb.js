@@ -35,8 +35,8 @@ const gcs = new Storage({
 const gcsBucket = gcs.bucket(`${project_id}.appspot.com`)
 
 
-// Create server
-http.createServer(async function (req, res) {
+// Export handler for router
+module.exports.handleRequest = async function(req, res) {
 
     // Parse query parameter
     const queryObject = url.parse(req.url, true).query
@@ -67,12 +67,7 @@ http.createServer(async function (req, res) {
         res.end(err)
     })
 
-
-
-
-}).listen(8081, 'localhost')
-
-console.log('img-thumb live server running on port 8081')
+}
 
 
 // Create image thumbnail and send to gcs
