@@ -1,37 +1,36 @@
 #!/usr/bin/env node
-const http = require('http') 
+const http = require('http')
 const url = require('url')
 const { v4: uuidv4 } = require('uuid');
 const sharp = require("sharp");
 
 // Project variables
-const project_id = 'cardboard-dev'
-const key_file_path = "../cardboard-dev-firebase-adminsdk-ffzb5-74ee316d49.json"
+const project_id = process.env.PROJECT_ID;
+const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
 
 //Admin
 const admin = require('firebase-admin')
-const fbServiceAccount = require(key_file_path);
 admin.initializeApp({
-    credential: admin.credential.cert(fbServiceAccount),
+    credential: admin.credential.cert(serviceAccount),
     databaseURL: `https://${project_id}.firebaseio.com`
 })
 
 // AW Wasabi
 const AWS = require('aws-sdk')
 const s3 = new AWS.S3({
-    correctClockSkew: true,
-    endpoint: 's3.us-east-1.wasabisys.com',
-    accessKeyId: '0QCM752BDQ9L5G5CAT0U',
-    secretAccessKey: 'aeGUw3eCIHFN08bvKY08I6eBeP9lNsRBJFEve137',
-    region: 'us-east-1',
-    logger: console
-})
+  correctClockSkew: true,
+  endpoint: process.env.AWS_ENDPOINT,
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: process.env.AWS_REGION,
+  logger: console,
+});
 
 //Storage
 const { Storage } = require('@google-cloud/storage')
 const gcs = new Storage({
     projectId: project_id,
-    keyFilename: key_file_path
+    credentials: serviceAccount
 });
 const gcsBucket = gcs.bucket(`${project_id}.appspot.com`)
 
@@ -71,9 +70,9 @@ http.createServer(async function (req, res) {
 
 
 
-}).listen(8080, 'localhost')
+}).listen(8081, 'localhost')
 
-console.log('img-thumb dev server running on port 8080')
+console.log('img-thumb live server running on port 8081')
 
 
 // Create image thumbnail and send to gcs
