@@ -8,9 +8,7 @@
     "dotenv": "^16.0.0"
   },
   "scripts": {
-    "img-thumb-dev": "node img-thumb-dev.js",
-    "img-thumb-live": "node img-thumb-live.js",
-    "video-thumb-dev": "node video-thumb-dev.js",
-    "video-thumb-live": "node video-thumb-live.js"
+    "img-thumb": "node img-thumb.js",
+    "video-thumb": "node video-thumb.js"
   }
 }

@@ -25,7 +25,7 @@ COPY sample.env sample.env
 RUN mkdir -p /usr/src/app/tmp
 
 # Expose ports for all services (img/video, dev/live)
-EXPOSE 8080 8081 8090 8091
+EXPOSE 8081 8091
 
-# Default command (can be overridden in Coolify)
-CMD ["node", "-r", "dotenv/config", "img-thumb-live.js"]
+# Start both servers (img-thumb and video-thumb) in the background
+CMD ["sh", "-c", "node -r dotenv/config img-thumb.js & node -r dotenv/config video-thumb.js && wait"]
