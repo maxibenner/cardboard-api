@@ -10,10 +10,12 @@ const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
 
 //Admin
 const admin = require('firebase-admin')
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL: `https://${project_id}.firebaseio.com`
-})
+if (!admin.apps.length) {
+    admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount),
+        databaseURL: `https://${project_id}.firebaseio.com`
+    })
+}
 
 // AW Wasabi
 const AWS = require('aws-sdk')
